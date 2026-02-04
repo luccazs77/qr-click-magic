@@ -2,8 +2,9 @@ import { QRCodeSVG } from "qrcode.react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, CheckCircle } from "lucide-react";
+import { Clock, CheckCircle, Copy, Check } from "lucide-react";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 interface AttendanceStatusProps {
   name: string;
@@ -19,12 +20,31 @@ const AttendanceStatus = ({
   attendanceId,
 }: AttendanceStatusProps) => {
   const [isFinalized, setIsFinalized] = useState(status === "finalizado");
+  const [copied, setCopied] = useState(false);
 
   // URL para a página de feedback
   const feedbackUrl = `${window.location.origin}/feedback?id=${attendanceId}`;
 
   const handleFinalize = () => {
     setIsFinalized(true);
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(feedbackUrl);
+      setCopied(true);
+      toast({
+        title: "Link copiado!",
+        description: "O link foi copiado para a área de transferência.",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast({
+        title: "Erro ao copiar",
+        description: "Não foi possível copiar o link.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -40,12 +60,31 @@ const AttendanceStatus = ({
         <div className="p-3 bg-white rounded-xl shadow-sm border">
           <QRCodeSVG
             value={feedbackUrl}
-            size={100}
+            size={110}
             level="H"
             includeMargin={false}
             className="rounded"
           />
         </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleCopyLink}
+          className="flex items-center gap-2"
+        >
+          {copied ? (
+            <>
+              <Check className="h-4 w-4" />
+              Copiado!
+            </>
+          ) : (
+            <>
+              <Copy className="h-4 w-4" />
+              Copiar Link
+            </>
+          )}
+        </Button>
 
         <p className="text-xs text-muted-foreground">
           Escaneie para avaliar o atendimento
