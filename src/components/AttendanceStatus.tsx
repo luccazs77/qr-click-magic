@@ -28,19 +28,19 @@ const AttendanceStatus = ({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full">
       <CardHeader className="flex flex-row items-center gap-2 pb-4">
         <Clock className="h-5 w-5 text-muted-foreground" />
         <CardTitle className="text-lg font-semibold">
           Status do Atendimento
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center text-center space-y-4">
+      <CardContent className="flex flex-col items-center text-center space-y-4 pb-6">
         {/* QR Code no lugar do avatar */}
-        <div className="p-4 bg-white rounded-xl shadow-sm border">
+        <div className="p-3 bg-white rounded-xl shadow-sm border">
           <QRCodeSVG
             value={feedbackUrl}
-            size={120}
+            size={100}
             level="H"
             includeMargin={false}
             className="rounded"
