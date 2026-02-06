@@ -58,7 +58,7 @@ const Index = () => {
           name="PEDRO RIBEIRO VIEIRA DE SOUZA"
           ra="025325"
           status="em_andamento"
-          attendanceId="ATD-2024-001"
+          attendanceId="1"
         />
 
         {/* Grid com Estatísticas e Histórico */}

@@ -32,14 +32,12 @@ const Feedback = () => {
 
     setIsSubmitting(true);
     
-    // Simula envio do feedback
+    // Salva feedback no localStorage
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
-    console.log("Feedback enviado:", {
-      atendimentoId,
-      rating,
-      comment,
-    });
+    const feedbacks = JSON.parse(localStorage.getItem("feedbacks") || "{}");
+    feedbacks[atendimentoId] = { rating, comment };
+    localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
 
     setIsSubmitting(false);
     setIsSubmitted(true);
