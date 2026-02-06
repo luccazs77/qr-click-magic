@@ -11,6 +11,7 @@ interface AttendanceStatusProps {
   ra: string;
   status: "em_andamento" | "finalizado";
   attendanceId: string;
+  onFinalize?: (attendanceId: string) => void;
 }
 
 const AttendanceStatus = ({
@@ -18,15 +19,16 @@ const AttendanceStatus = ({
   ra,
   status,
   attendanceId,
+  onFinalize,
 }: AttendanceStatusProps) => {
-  const [isFinalized, setIsFinalized] = useState(status === "finalizado");
   const [copied, setCopied] = useState(false);
+  const isFinalized = status === "finalizado";
 
   // URL para a página de feedback
   const feedbackUrl = `${window.location.origin}/feedback?id=${attendanceId}`;
 
   const handleFinalize = () => {
-    setIsFinalized(true);
+    onFinalize?.(attendanceId);
   };
 
   const handleCopyLink = async () => {

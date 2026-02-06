@@ -77,24 +77,22 @@ const AttendanceHistory = ({ attendances }: AttendanceHistoryProps) => {
                 </div>
               </div>
             </div>
-            {attendance.status === "finalizado" && (
-              feedbacks[attendance.id] ? (
-                <div className="flex items-center gap-0.5">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3.5 w-3.5 ${
-                        i < feedbacks[attendance.id].rating
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "fill-transparent text-muted-foreground"
-                      }`}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <span className="text-xs text-muted-foreground">Sem avaliação</span>
-              )
-            )}
+            {feedbacks[attendance.id] ? (
+              <div className="flex items-center gap-0.5">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star
+                    key={i}
+                    className={`h-3.5 w-3.5 ${
+                      i < feedbacks[attendance.id].rating
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "fill-transparent text-muted-foreground"
+                    }`}
+                  />
+                ))}
+              </div>
+            ) : attendance.status === "finalizado" ? (
+              <span className="text-xs text-muted-foreground">Sem avaliação</span>
+            ) : null}
           </div>
         ))}
       </CardContent>
