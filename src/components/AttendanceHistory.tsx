@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { History, Clock, User } from "lucide-react";
+import { History, Clock, User, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Attendance {
   id: string;
@@ -17,6 +18,26 @@ interface AttendanceHistoryProps {
 }
 
 const AttendanceHistory = ({ attendances }: AttendanceHistoryProps) => {
+  const [feedbacks, setFeedbacks] = useState<Record<string, { rating: number; comment: string }>>({});
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("feedbacks") || "{}");
+    setFeedbacks(stored);
+
+    const handleStorage = () => {
+      setFeedbacks(JSON.parse(localStorage.getItem("feedbacks") || "{}"));
+    };
+    window.addEventListener("storage", handleStorage);
+    // Poll for same-tab updates
+    const interval = setInterval(() => {
+      setFeedbacks(JSON.parse(localStorage.getItem("feedbacks") || "{}"));
+    }, 2000);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center gap-2 pb-4">
@@ -56,8 +77,23 @@ const AttendanceHistory = ({ attendances }: AttendanceHistoryProps) => {
                 </div>
               </div>
             </div>
-            {attendance.status === "finalizado" && !attendance.hasEvaluation && (
-              <span className="text-xs text-muted-foreground">Sem avaliação</span>
+            {attendance.status === "finalizado" && (
+              feedbacks[attendance.id] ? (
+                <div className="flex items-center gap-0.5">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-3.5 w-3.5 ${
+                        i < feedbacks[attendance.id].rating
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "fill-transparent text-muted-foreground"
+                      }`}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <span className="text-xs text-muted-foreground">Sem avaliação</span>
+              )
             )}
           </div>
         ))}
