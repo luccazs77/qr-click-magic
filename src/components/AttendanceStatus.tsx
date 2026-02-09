@@ -25,7 +25,7 @@ const AttendanceStatus = ({
   const isFinalized = status === "finalizado";
 
   // URL para a página de feedback
-  const feedbackUrl = `${window.location.origin}/feedback?id=${attendanceId}`;
+  const feedbackUrl = `${window.location.origin}/feedback?id=${attendanceId}&atendente=${encodeURIComponent("Gabriel")}&servico=${encodeURIComponent("Matrícula")}&aluno=${encodeURIComponent(name)}&data=${encodeURIComponent(new Date().toLocaleDateString("pt-BR"))}`;
 
   const handleFinalize = () => {
     onFinalize?.(attendanceId);
